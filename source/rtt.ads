@@ -49,19 +49,15 @@ package RTT is
 
    type Buffer_Array is array (Positive range <>) of Buffer;
 
-   subtype String_16 is Interfaces.C.char_array (1 .. 16);
-
-   function SEGGER_RTT return String_16;
-   --  Predefined control block identifier value
-
-   type Control_Block_Id is array (1 .. 16) of Interfaces.C.char
-     with Pack, Atomic_Components;
+   use type Interfaces.C.char_array;
 
    type Control_Block
      (Max_Up_Buffers   : Natural;
       Max_Down_Buffers : Natural) is
    limited record
-      ID   : Control_Block_Id := Control_Block_Id (SEGGER_RTT);
+      ID   : Interfaces.C.char_array (1 .. 16) :=
+        "SEGGER RTT" & (1 .. 6 => Interfaces.C.nul);
+      --  Predefined control block identifier value
       Up   : Buffer_Array (1 .. Max_Up_Buffers);
       Down : Buffer_Array (1 .. Max_Down_Buffers);
    end record;
@@ -78,10 +74,26 @@ package RTT is
       Index : Positive;
       Data  : HAL.UInt8_Array)
         with Pre => Index <= Block.Max_Up_Buffers;
+   --  Write Data into Up buffer with given Index of the control block.
+
+   procedure Put
+     (Text  : String;
+      Block : not null access Control_Block;
+      Index : Positive := 1);
+   --  Put Text into Up buffer with given Index of the control block.
 
    procedure Put_Line
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Positive);
+      Index : Positive := 1);
+   --  Put Text and CR, LF into Up buffer with given Index of the control
+   --  block.
+
+   procedure Put
+     (Value  : Integer;
+      Block : not null access Control_Block;
+      Index : Positive := 1);
+   --  Dump Value in binary format. Could be used for plotting graphs with
+   --  Cortex Debug.
 
 end RTT;

@@ -1,5 +1,33 @@
 package body RTT is
 
+   procedure Put
+     (Value  : Integer;
+      Block  : not null access Control_Block;
+      Index  : Positive := 1)
+   is
+      Copy : aliased Integer := Value;
+      subtype UInt8_Array is HAL.UInt8_Array (1 .. 4);
+      Data  : UInt8_Array
+        with Import, Address => Copy'Address;
+   begin
+      Write (Block.all, Index, Data);
+   end Put;
+
+   ---------
+   -- Put --
+   ---------
+
+   procedure Put
+     (Text  : String;
+      Block : not null access Control_Block;
+      Index : Positive := 1)
+   is
+      subtype UInt8_Array is HAL.UInt8_Array (Text'Range);
+      Data  : UInt8_Array with Import, Address => Text'Address;
+   begin
+      Write (Block.all, Index, Data);
+   end Put;
+
    --------------
    -- Put_Line --
    --------------
@@ -7,7 +35,7 @@ package body RTT is
    procedure Put_Line
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Positive)
+      Index : Positive := 1)
    is
       subtype UInt8_Array is HAL.UInt8_Array (Text'Range);
       Data  : UInt8_Array with Import, Address => Text'Address;
@@ -15,25 +43,6 @@ package body RTT is
       Write (Block.all, Index, Data);
       Write (Block.all, Index, (16#0D#, 16#0A#));
    end Put_Line;
-
-   ----------------
-   -- SEGGER_RTT --
-   ----------------
-
-   function SEGGER_RTT return String_16 is
-      use type Interfaces.C.size_t;
-      use type Interfaces.C.char_array;
-
-      Reversed : constant String_16 :=
-        (1 .. 6 => Interfaces.C.nul) & "TTR REGGES";
-      --  Keep value reversed to avoid a match
-   begin
-      return Result : String_16 do
-         for J in Reversed'Range loop
-            Result (J) := Reversed (17 - J);
-         end loop;
-      end return;
-   end SEGGER_RTT;
 
    -----------
    -- Write --

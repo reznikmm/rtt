@@ -1,3 +1,15 @@
 {
-    "ada.projectFile": "gnat/rtt.gpr"
+    "ada.projectFile": "gnat/rtt.gpr",
+
+    // Set a workspace-specific environment for Linux/OSX platforms
+    "terminal.integrated.env.linux": {
+    //  Optionally, you can append the Ada toolchain of your choice to the PATH environment variable
+    //  if you want to use a different toolchain.
+    //  "PATH": "<PATH_TO_TOOLCHAIN>:${env:PATH}",
+
+    //  Append the path to the directory containing print_utils.gpr project file dependency to
+    //  the GPR_PROJECT_PATH environment variable
+    "GPR_PROJECT_PATH": "../Ada_Drivers_Library/boards/stm32_f4ve/:${env:GPR_PROJECT_PATH}"
+    },
+
 }

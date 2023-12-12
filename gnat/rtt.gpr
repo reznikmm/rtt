@@ -1,8 +1,8 @@
-with "stm32f4xx_m_full.gpr";
+with "stm32_f4ve_full.gpr";
 
 project RTT is
 
-   for Runtime ("ada") use Stm32F4Xx_M_Full'Runtime ("Ada");
+   for Runtime ("ada") use stm32_f4ve_Full'Runtime ("Ada");
    for Target use "arm-eabi";
    for Main use ("main.adb");
    for Languages use ("Ada");
@@ -10,7 +10,7 @@ project RTT is
    for Object_Dir use "../.obj";
    for Create_Missing_Dirs use "True";
 
-   package Compiler renames Stm32F4Xx_M_Full.Compiler;
+   package Compiler renames stm32_f4ve_Full.Compiler;
 
    package Ide is
       for Program_Host use "localhost:3333";

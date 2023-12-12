@@ -4,7 +4,7 @@ with HAL;
 
 with RTT;
 
-package RTT_Instanse is
+package RTT_IO is
    use type Interfaces.C.char_array;
 
    Terminal : constant Interfaces.C.char_array :=
@@ -20,11 +20,26 @@ package RTT_Instanse is
                Buffer  => Terminal_Output'Address,
                Size    => Terminal_Output'Length,
                others  => <>)),
-      others           => <>);
+      others           => <>)
+    with Export, External_Name => "_SEGGER_RTT";
+
+   procedure Put
+     (Text  : String;
+      CB    : access RTT.Control_Block := Control_Block'Access;
+      Index : Positive := 1) renames RTT.Put;
+   --  Put Text.
 
    procedure Put_Line
      (Text  : String;
       CB    : access RTT.Control_Block := Control_Block'Access;
       Index : Positive := 1) renames RTT.Put_Line;
+   --  Put Text and CR, LF.
 
-end RTT_Instanse;
+   procedure Put
+     (Value : Integer;
+      CB    : access RTT.Control_Block := Control_Block'Access;
+      Index : Positive := 1) renames RTT.Put;
+   --  Dump Value in binary format. Could be used for plotting graphs with
+   --  Cortex Debug.
+
+end RTT_IO;
