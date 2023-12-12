@@ -10,15 +10,23 @@ package RTT_IO is
    Terminal : constant Interfaces.C.char_array :=
      ("Terminal" & Interfaces.C.nul);
 
+   Graph : constant Interfaces.C.char_array :=
+     ("Graph" & Interfaces.C.nul);
+
    Terminal_Output : HAL.UInt8_Array (1 .. 256);
+   Graph_Output : HAL.UInt8_Array (1 .. 16);
 
    Control_Block : aliased RTT.Control_Block :=
-     (Max_Up_Buffers   => 1,
+     (Max_Up_Buffers   => 2,
       Max_Down_Buffers => 0,
       Up               =>
         (1 => (Name    => Terminal'Address,
                Buffer  => Terminal_Output'Address,
                Size    => Terminal_Output'Length,
+               others  => <>),
+         2 => (Name    => Graph'Address,
+               Buffer  => Graph_Output'Address,
+               Size    => Graph_Output'Length,
                others  => <>)),
       others           => <>)
     with Export, External_Name => "_SEGGER_RTT";

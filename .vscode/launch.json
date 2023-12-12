@@ -22,41 +22,33 @@
                     {
                         "port": 0,
                         "type": "console"
-                    }
+                    },
+                    {
+                        "type": "graph",
+                        "port": 1,
+                        "encoding": "unsigned",
+                        "graphId": "1",
+                        "scale": 1
+                    },
                 ]
-            }
-
-            //  plotting example:
-            // "rttConfig": {
-            //     "enabled": true,
-            //     "address": "auto",
-            //     "decoders": [
-            //         {
-            //             "type": "graph",
-            //             "port": 0,
-            //             "encoding": "unsigned",
-            //             "graphId": "1", 
-            //             "scale": 1
-            //         },
-            //     ]
-            // },
-            // "graphConfig": [
-            //     {
-            //         "label": "Graph 1",
-            //         "timespan": 60,
-            //         "type": "realtime",
-            //         "annotate": false,
-            //         "maximum": 3000,
-            //         "minimum": 1500,
-            //         "plots": [
-            //             {
-            //                 "graphId": "1", 
-            //                 "label": "data 1",
-            //                 "color": "#53753c"
-            //             }
-            //         ]
-            //     },
-            // ]
+            },
+            "graphConfig": [
+                {
+                    "label": "Graph 1",
+                    "timespan": 60,
+                    "type": "realtime",
+                    "annotate": false,
+                    "maximum": 8,
+                    "minimum": 0,
+                    "plots": [
+                        {
+                            "graphId": "1", 
+                            "label": "data 1",
+                            "color": "#53753c"
+                        }
+                    ]
+                },
+            ]
         }
     ]
 }
