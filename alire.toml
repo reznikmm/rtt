@@ -26,6 +26,3 @@ Up_Buffers = {type = "Integer", default = 1}
 
 Down_Buffers = {type = "Integer", default = 0}
 # Number of "down" buffers (from host board)
-
-[[depends-on]]
-hal = "^1.0.0"

@@ -15,8 +15,6 @@
 with System;
 with Interfaces.C;
 
-with HAL;
-
 package RTT is
    pragma Preelaborate;
 
@@ -74,10 +72,12 @@ package RTT is
       Max_Down_Buffers at 20 range 0 .. 32 - 1;
    end record;
 
+   type Byte_Array is array (Positive range <>) of Interfaces.Unsigned_8;
+
    procedure Write
      (Block : in out Control_Block;
       Index : Positive;
-      Data  : HAL.UInt8_Array)
+      Data  : Byte_Array)
         with Pre => Index <= Block.Max_Up_Buffers;
    --  Write Data into Up buffer with given Index of the control block.
 

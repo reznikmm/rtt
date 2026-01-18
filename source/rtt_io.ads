@@ -5,8 +5,6 @@
 
 with Interfaces.C;
 
-with HAL;
-
 with RTT;
 
 package RTT_IO is
@@ -18,8 +16,8 @@ package RTT_IO is
    Graph : constant Interfaces.C.char_array :=
      ("Graph" & Interfaces.C.nul);
 
-   Terminal_Output : HAL.UInt8_Array (1 .. 256);
-   Graph_Output : HAL.UInt8_Array (1 .. 16);
+   Terminal_Output : RTT.Byte_Array (1 .. 256);
+   Graph_Output : RTT.Byte_Array (1 .. 16);
 
    Control_Block : aliased RTT.Control_Block :=
      (Max_Up_Buffers   => 2,

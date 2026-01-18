@@ -11,7 +11,7 @@ package body RTT is
       Index  : Positive := 1)
    is
       Copy : aliased Integer := Value;
-      subtype UInt8_Array is HAL.UInt8_Array (1 .. 4);
+      subtype UInt8_Array is Byte_Array (1 .. 4);
       Data  : UInt8_Array
         with Import, Address => Copy'Address;
    begin
@@ -27,7 +27,7 @@ package body RTT is
       Block : not null access Control_Block;
       Index : Positive := 1)
    is
-      subtype UInt8_Array is HAL.UInt8_Array (Text'Range);
+      subtype UInt8_Array is Byte_Array (Text'Range);
       Data  : UInt8_Array with Import, Address => Text'Address;
    begin
       Write (Block.all, Index, Data);
@@ -42,7 +42,7 @@ package body RTT is
       Block : not null access Control_Block;
       Index : Positive := 1)
    is
-      subtype UInt8_Array is HAL.UInt8_Array (Text'Range);
+      subtype UInt8_Array is Byte_Array (Text'Range);
       Data  : UInt8_Array with Import, Address => Text'Address;
    begin
       Write (Block.all, Index, Data);
@@ -56,12 +56,12 @@ package body RTT is
    procedure Write
      (Block : in out Control_Block;
       Index : Positive;
-      Data  : HAL.UInt8_Array)
+      Data  : Byte_Array)
    is
       use type Interfaces.C.unsigned;
 
       type Unbounded_UInt8_Array is
-        array (0 .. Interfaces.C.unsigned'Last) of HAL.UInt8;
+        array (0 .. Interfaces.C.unsigned'Last) of Interfaces.Unsigned_8;
 
       Buffer : RTT.Buffer renames Block.Up (Index);
 
