@@ -1,3 +1,8 @@
+--  SPDX-FileCopyrightText: 2023-2026 Max Reznik <reznikmm@gmail.com>
+--
+--  SPDX-License-Identifier: BSD-3-Clause
+---------------------------------------------------------------------
+
 with Interfaces.C;
 
 with HAL;

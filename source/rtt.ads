@@ -1,3 +1,8 @@
+--  SPDX-FileCopyrightText: 2023-2026 Max Reznik <reznikmm@gmail.com>
+--
+--  SPDX-License-Identifier: BSD-3-Clause
+---------------------------------------------------------------------
+
 --  This package provides Real Time Transfer implementation on a target side.
 --
 --  Real Time Transfer (RTT) is an interface specified by SEGGER based on basic

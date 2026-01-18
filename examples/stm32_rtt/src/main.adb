@@ -1,6 +1,9 @@
-with Ada.Real_Time;
+--  SPDX-FileCopyrightText: 2023-2026 Max Reznik <reznikmm@gmail.com>
+--
+--  SPDX-License-Identifier: BSD-3-Clause
+---------------------------------------------------------------------
 
-with STM32.Board;
+with Ada.Real_Time;
 
 with RTT_IO;
 
@@ -13,11 +16,8 @@ procedure Main is
    Step : Counter := 0;
 
 begin
-   STM32.Board.Initialize_LEDs;
-
    loop
-      STM32.Board.Toggle (STM32.Board.LCH_LED);
-      RTT_IO.Put_Line ("Hello, Ada!");
+      RTT_IO.Put_Line ("Hello, Ada!" & Step'Image);
       Step := Step + 1;
       RTT_IO.Put (Integer (Step), Index => 2);
       Next := Next + Ada.Real_Time.Milliseconds (200);

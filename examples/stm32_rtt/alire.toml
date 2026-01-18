@@ -1,0 +1,26 @@
+#  SPDX-FileCopyrightText: 2023-2026 Max Reznik <reznikmm@gmail.com>
+#
+#  SPDX-License-Identifier: BSD-3-Clause
+####################################################################
+
+name = "stm32_rtt"
+description = "An example for STM32 and RTT"
+version = "0.1.0-dev"
+
+authors = ["Max Reznik"]
+maintainers = ["Max Reznik <reznikmm@gmail.com>"]
+maintainers-logins = ["reznikmm"]
+licenses = "Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = []
+
+executables = ["stm32_rtt"]
+
+[[depends-on]]
+gnat_arm_elf = "*"
+
+[[depends-on]]
+rtt = "*"
+
+[[pins]]
+rtt = { path='../..' }

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2023-2025 Max Reznik <reznikmm@gmail.com>
+//
+// SPDX-License-Identifier: BSD-3-Clause
+
 {
     "ada.projectFile": "gnat/rtt.gpr",
 

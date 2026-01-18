@@ -14,3 +14,5 @@ jobs:
     - uses: alire-project/setup-alire@v5
     - name: Build project
       run: alr build
+    - name: Build examples
+      run: alr -C examples/stm32_rtt build
