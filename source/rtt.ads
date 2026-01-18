@@ -1,4 +1,5 @@
 --  SPDX-FileCopyrightText: 2023-2026 Max Reznik <reznikmm@gmail.com>
+--  SPDX-FileCopyrightText: 2025      Kevin Chadwick
 --
 --  SPDX-License-Identifier: BSD-3-Clause
 ---------------------------------------------------------------------
@@ -15,10 +16,30 @@
 with System;
 with Interfaces.C;
 
+with Rtt_Config;
+
 package RTT is
    pragma Preelaborate;
 
+   Up_Buffers   : constant := Rtt_Config.Up_Buffers;
+   Down_Buffers : constant := Rtt_Config.Down_Buffers;
+   subtype Index_Up_Max is Positive range 1 .. Up_Buffers;
+   --  subtype Index_Down_Max is Positive range 1 .. Down_Buffers;
+
    type Operating_Mode is (No_Block_Skip, No_Block_Trim, Block_If_FIFO_Full);
+   --  Mode for a buffer
+   --
+   --  @value No_Block_Skip
+   --  if the up buffer (target to host) has not enough data to hold all the
+   --  incoming data then all data is discarded
+   --
+   --  @value No_Block_Trim
+   --  if the up buffer (target to host) has not enough data to hold all the
+   --  incoming data then the available space is filled and the rest discarded
+   --
+   --  @value Block_If_FIFO_Full
+   --  The application will wait when the buffer is full resulting in a blocked
+   --  application state but preventing data from being lost
 
    for Operating_Mode use
      (No_Block_Skip      => 0,
@@ -42,9 +63,11 @@ package RTT is
       --  Buffer pointer.
       Size   : Interfaces.C.unsigned := 0;
       --  Size of the buffer in bytes.
-      Write_Offset : Interfaces.C.unsigned := 0 with Atomic;
+      Write_Offset : Interfaces.C.unsigned := 0
+        with Atomic;
       --  Next byte to be written
-      Read_Offset : Interfaces.C.unsigned := 0 with Atomic;
+      Read_Offset  : Interfaces.C.unsigned := 0
+        with Atomic;
       --  Next byte to be read
       Flags  : Buffer_Flags;
    end record;
@@ -55,8 +78,8 @@ package RTT is
    use type Interfaces.C.char_array;
 
    type Control_Block
-     (Max_Up_Buffers   : Natural;
-      Max_Down_Buffers : Natural) is
+     (Max_Up_Buffers   : Natural := Up_Buffers;
+      Max_Down_Buffers : Natural := Down_Buffers) is
    limited record
       ID   : Interfaces.C.char_array (1 .. 16) :=
         "SEGGER RTT" & (1 .. 6 => Interfaces.C.nul);
@@ -76,7 +99,7 @@ package RTT is
 
    procedure Write
      (Block : in out Control_Block;
-      Index : Positive;
+      Index : Index_Up_Max;
       Data  : Byte_Array)
         with Pre => Index <= Block.Max_Up_Buffers;
    --  Write Data into Up buffer with given Index of the control block.
@@ -84,20 +107,20 @@ package RTT is
    procedure Put
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Positive := 1);
+      Index : Index_Up_Max := 1);
    --  Put Text into Up buffer with given Index of the control block.
 
    procedure Put_Line
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Positive := 1);
+      Index : Index_Up_Max := 1);
    --  Put Text and CR, LF into Up buffer with given Index of the control
    --  block.
 
    procedure Put
      (Value  : Integer;
       Block : not null access Control_Block;
-      Index : Positive := 1);
+      Index : Index_Up_Max := 1);
    --  Dump Value in binary format. Could be used for plotting graphs with
    --  Cortex Debug.
 
