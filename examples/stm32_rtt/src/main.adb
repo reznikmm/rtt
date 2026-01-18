@@ -5,7 +5,7 @@
 
 with Ada.Real_Time;
 
-with RTT_IO;
+with RTT.IO;
 
 procedure Main is
    use type Ada.Real_Time.Time;
@@ -17,9 +17,9 @@ procedure Main is
 
 begin
    loop
-      RTT_IO.Put_Line ("Hello, Ada!" & Step'Image);
+      RTT.IO.Put_Line ("Hello, Ada!" & Step'Image);
       Step := Step + 1;
-      RTT_IO.Put (Integer (Step), Index => 2);
+      RTT.IO.Dump (Integer (Step), Buffer => 2);
       Next := Next + Ada.Real_Time.Milliseconds (200);
       delay until Next;
    end loop;

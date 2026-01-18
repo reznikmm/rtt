@@ -24,3 +24,6 @@ rtt = "*"
 
 [[pins]]
 rtt = { path='../..' }
+
+[configuration.values]
+rtt.Up_Buffers = 2

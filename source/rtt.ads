@@ -19,12 +19,15 @@ with Interfaces.C;
 with Rtt_Config;
 
 package RTT is
-   pragma Preelaborate;
+   pragma Pure;
 
    Up_Buffers   : constant := Rtt_Config.Up_Buffers;
    Down_Buffers : constant := Rtt_Config.Down_Buffers;
-   subtype Index_Up_Max is Positive range 1 .. Up_Buffers;
-   --  subtype Index_Down_Max is Positive range 1 .. Down_Buffers;
+
+   pragma Warnings (Off, "null range");
+   subtype Up_Buffer_Index is Positive range 1 .. Up_Buffers;
+   subtype Down_Buffer_Index is Positive range 1 .. Down_Buffers;
+   pragma Warnings (On, "null range");
 
    type Operating_Mode is (No_Block_Skip, No_Block_Trim, Block_If_FIFO_Full);
    --  Mode for a buffer
@@ -78,8 +81,8 @@ package RTT is
    use type Interfaces.C.char_array;
 
    type Control_Block
-     (Max_Up_Buffers   : Natural := Up_Buffers;
-      Max_Down_Buffers : Natural := Down_Buffers) is
+     (Max_Up_Buffers   : Natural;
+      Max_Down_Buffers : Natural) is
    limited record
       ID   : Interfaces.C.char_array (1 .. 16) :=
         "SEGGER RTT" & (1 .. 6 => Interfaces.C.nul);
@@ -99,7 +102,7 @@ package RTT is
 
    procedure Write
      (Block : in out Control_Block;
-      Index : Index_Up_Max;
+      Index : Up_Buffer_Index;
       Data  : Byte_Array)
         with Pre => Index <= Block.Max_Up_Buffers;
    --  Write Data into Up buffer with given Index of the control block.
@@ -107,20 +110,20 @@ package RTT is
    procedure Put
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Index_Up_Max := 1);
+      Index : Up_Buffer_Index := 1);
    --  Put Text into Up buffer with given Index of the control block.
 
    procedure Put_Line
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Index_Up_Max := 1);
+      Index : Up_Buffer_Index := 1);
    --  Put Text and CR, LF into Up buffer with given Index of the control
    --  block.
 
-   procedure Put
-     (Value  : Integer;
+   procedure Dump
+     (Value : Integer;
       Block : not null access Control_Block;
-      Index : Index_Up_Max := 1);
+      Index : Up_Buffer_Index := 1);
    --  Dump Value in binary format. Could be used for plotting graphs with
    --  Cortex Debug.
 

@@ -21,8 +21,8 @@ development.contracts = "Yes"
 "*".debug_info = "Yes"
 
 [configuration.variables]
-Up_Buffers = {type = "Integer", default = 1}
+Up_Buffers = {type = "Integer", first = 0, last = 9, default = 1}
 # Number of "up" buffers (from board to host)
 
-Down_Buffers = {type = "Integer", default = 0}
+Down_Buffers = {type = "Integer", first = 0, last = 9, default = 0}
 # Number of "down" buffers (from host board)

@@ -6,10 +6,14 @@
 
 package body RTT is
 
-   procedure Put
-     (Value  : Integer;
+   ----------
+   -- Dump --
+   ----------
+
+   procedure Dump
+     (Value : Integer;
       Block : not null access Control_Block;
-      Index : Index_Up_Max := 1)
+      Index : Up_Buffer_Index := 1)
    is
       Copy : aliased Integer := Value;
       subtype UInt8_Array is Byte_Array (1 .. 4);
@@ -17,7 +21,7 @@ package body RTT is
         with Import, Address => Copy'Address;
    begin
       Write (Block.all, Index, Data);
-   end Put;
+   end Dump;
 
    ---------
    -- Put --
@@ -26,7 +30,7 @@ package body RTT is
    procedure Put
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Index_Up_Max := 1)
+      Index : Up_Buffer_Index := 1)
    is
       subtype UInt8_Array is Byte_Array (Text'Range);
       Data  : UInt8_Array with Import, Address => Text'Address;
@@ -41,7 +45,7 @@ package body RTT is
    procedure Put_Line
      (Text  : String;
       Block : not null access Control_Block;
-      Index : Index_Up_Max := 1)
+      Index : Up_Buffer_Index := 1)
    is
       subtype UInt8_Array is Byte_Array (Text'Range);
       Data  : UInt8_Array with Import, Address => Text'Address;
@@ -56,13 +60,15 @@ package body RTT is
 
    procedure Write
      (Block : in out Control_Block;
-      Index : Index_Up_Max;
+      Index : Up_Buffer_Index;
       Data  : Byte_Array)
    is
       use type Interfaces.C.unsigned;
 
       type Unbounded_UInt8_Array is
         array (0 .. Interfaces.C.unsigned'Last) of Interfaces.Unsigned_8;
+
+      Buffer : RTT.Buffer renames Block.Up (Index);
 
       Target : Unbounded_UInt8_Array
         with Import, Address => Block.Up (Index).Buffer;
@@ -71,10 +77,10 @@ package body RTT is
       From   : Natural := Data'First;
       Length : Natural;
 
-      Write_Offset : Interfaces.C.unsigned := Block.Up (Index).Write_Offset;
+      Write_Offset : Interfaces.C.unsigned := Buffer.Write_Offset;
    begin
       while From <= Data'Last loop
-         Left := Block.Up (Index).Size - Block.Up (Index).Write_Offset;
+         Left := Buffer.Size - Buffer.Write_Offset;
          Length := Natural'Min (Data'Last - From + 1, Natural (Left));
 
          for J in 1 .. Length loop
@@ -83,11 +89,11 @@ package body RTT is
             From := From + 1;
          end loop;
 
-         if Write_Offset >= Block.Up (Index).Size then
+         if Write_Offset >= Buffer.Size then
             Write_Offset := 0;
          end if;
 
-         Block.Up (Index).Write_Offset := Write_Offset;
+         Buffer.Write_Offset := Write_Offset;
       end loop;
    end Write;
 
