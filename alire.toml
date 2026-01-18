@@ -1,0 +1,31 @@
+name = "rtt"
+description = "Real Time Transfer implementation in Ada"
+version = "0.1.0-dev"
+
+authors = ["Max Reznik", "Kevin Chadwick"]
+maintainers = ["Max Reznik <reznikmm@gmail.com>", "Kevin Chadwick <kc-github@chadwicks.me.uk>"]
+maintainers-logins = ["reznikmm", "kevlar700"]
+licenses = "Apache-2.0 WITH LLVM-exception"
+website = "https://github.com/reznikmm/rtt"
+tags = ["embedded", "zfp", "logging"]
+
+project-files = ["gnat/rtt.gpr"]
+
+[configuration]
+generate_c = false
+
+[build-switches]
+development.optimization = ["-O0"]
+development.style_checks = ["-gnaty", "-gnaty-B"]
+development.contracts = "Yes"
+"*".debug_info = "Yes"
+
+[configuration.variables]
+Up_Buffers = {type = "Integer", default = 1}
+# Number of "up" buffers (from board to host)
+
+Down_Buffers = {type = "Integer", default = 0}
+# Number of "down" buffers (from host board)
+
+[[depends-on]]
+hal = "^1.0.0"
